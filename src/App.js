@@ -1,10 +1,11 @@
 import React from "react";
+import Frame from "./components/Frame";
 
 function App() {
   return (
-    <>
-      <h1 className="text-red-600">Hello World</h1>
-    </>
+    <div className="flex justify-center my-5">
+      <Frame />
+    </div>
   );
 }
 
