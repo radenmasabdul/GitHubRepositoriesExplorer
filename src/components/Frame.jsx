@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const Frame = () => {
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState("");
   const [search, setSearch] = useState([]);
+  const [username, setUserName] = useState([]);
 
   const searchUser = (e) => {
     e.preventDefault();
@@ -18,6 +19,8 @@ const Frame = () => {
       .then((response) => {
         // handle success
         console.log(response);
+        console.log(response.data.items);
+        setUserName(response.data.items);
       })
       .catch((error) => {
         // handle error
@@ -49,6 +52,23 @@ const Frame = () => {
           </button>
 
           <p>Showing user for "{search}"</p>
+
+          {username.map((user) => (
+            <div
+              key={user.id}
+              tabIndex={0}
+              className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box"
+            >
+              <div className="collapse-title text-xl font-medium">
+                <p key={user.id}>{user.login}</p>
+              </div>
+              <div className="collapse-content">
+                <p>
+                  tabIndex={0} attribute is necessary to make the div focusable
+                </p>
+              </div>
+            </div>
+          ))}
         </form>
       </div>
     </>
