@@ -5,11 +5,13 @@ const Frame = () => {
   const [user, setUser] = useState("");
   const [search, setSearch] = useState([]);
   const [username, setUserName] = useState([]);
+  const [repo, setRepo] = useState([]);
+  const [repotitle, setRepoTitle] = useState([]);
 
-  const searchUser = (e) => {
+  const searchUser = async (e) => {
     e.preventDefault();
     setSearch(user);
-    axios
+    await axios
       .get(`https://api.github.com/search/users`, {
         params: {
           q: user,
@@ -17,13 +19,23 @@ const Frame = () => {
         },
       })
       .then((response) => {
-        // handle success
-        console.log(response);
-        console.log(response.data.items);
+        // console.log(response);
+        // console.log(response.data.items);
         setUserName(response.data.items);
       })
       .catch((error) => {
-        // handle error
+        console.log(error);
+      });
+  };
+
+  const getRepo = async () => {
+    await axios
+      .get(`https://api.github.com/users/${user}/repos`)
+      .then((response) => {
+        console.log(response.data);
+        setRepo(response.data);
+      })
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -55,6 +67,8 @@ const Frame = () => {
 
           {username.map((user) => (
             <div
+              onClick={() => getRepo(user.login)}
+              value={repo}
               key={user.id}
               tabIndex={0}
               className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box"
@@ -62,11 +76,12 @@ const Frame = () => {
               <div className="collapse-title text-xl font-medium">
                 <p key={user.id}>{user.login}</p>
               </div>
-              <div className="collapse-content">
-                <p>
-                  tabIndex={0} attribute is necessary to make the div focusable
-                </p>
-              </div>
+
+              {repotitle.map((repo) => (
+                <div className="collapse-content">
+                  <p>{repo.name}</p>
+                </div>
+              ))}
             </div>
           ))}
         </form>
