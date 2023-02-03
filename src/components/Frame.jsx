@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 
+import { ThemeContext } from "../context";
+
 import { AiFillStar } from "react-icons/ai";
+import { FaSun } from "react-icons/fa";
+import { FaMoon } from "react-icons/fa";
 
 const Frame = () => {
   const [user, setUser] = useState("");
@@ -9,6 +13,8 @@ const Frame = () => {
   const [username, setUserName] = useState([]);
   const [repo, setRepo] = useState([]);
   const [repotitle, setRepoTitle] = useState([]);
+
+  const { isLight, setIsLight } = useContext(ThemeContext);
 
   const searchUser = async (e) => {
     e.preventDefault();
@@ -44,8 +50,24 @@ const Frame = () => {
 
   return (
     <>
-      <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-        <p className="text-center mb-4">Github Repository Explore</p>
+      <div className="w-full max-w-sm p-4 bg-white dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl sm:p-6 md:p-8 dark:border-gray-700">
+        <div className="grid grid-flow-col">
+          <p className="flex justify-end mb-4 dark:text-white">
+            Github Repository Explore
+          </p>
+          <button
+            onClick={() => setIsLight(!isLight)}
+            className="flex justify-end gap-1"
+          >
+            <FaSun
+              className={`text-amber-400 text-xl ${isLight ? "" : "hidden"}`}
+            />
+            <FaMoon
+              className={`text-white text-xl ${isLight ? "hidden" : ""}`}
+            />
+          </button>
+        </div>
+
         <form className="space-y-6" onSubmit={searchUser}>
           <div>
             <input
@@ -66,7 +88,9 @@ const Frame = () => {
             Search
           </button>
 
-          <p>{search.length > 0 ? `Showing users for "${search}"` : ""}</p>
+          <p className="dark:text-white">
+            {search.length > 0 ? `Showing users for "${search}"` : ""}
+          </p>
 
           {username.map((user) => (
             <div
@@ -87,13 +111,15 @@ const Frame = () => {
                     className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow my-5 sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700"
                   >
                     <div className="grid grid-flow-col">
-                      <div>{repos.name}</div>
-                      <div className="flex justify-end gap-1">
+                      <div className="dark:text-white">{repos.name}</div>
+                      <div className="flex justify-end gap-1 dark:text-white">
                         {repos.stargazers_count}
                         <AiFillStar className="text-xl text-amber-400" />
                       </div>
                     </div>
-                    <div className="mt-4">{repos.description}</div>
+                    <div className="mt-4 dark:text-white">
+                      {repos.description}
+                    </div>
                   </div>
                 ))}
               </div>
