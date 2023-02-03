@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+import { AiFillStar } from "react-icons/ai";
+
 const Frame = () => {
   const [user, setUser] = useState("");
   const [search, setSearch] = useState([]);
@@ -30,7 +32,7 @@ const Frame = () => {
 
   const getRepo = async (userRepo) => {
     await axios
-      .get(`https://api.github.com/users/${userRepo}/repos?per_page=3&page=3`)
+      .get(`https://api.github.com/users/${userRepo}/repos?per_page=3`)
       .then((response) => {
         // console.log(response.data);
         setRepoTitle(response.data);
@@ -43,6 +45,7 @@ const Frame = () => {
   return (
     <>
       <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+        <p className="text-center mb-4">Github Repository Explore</p>
         <form className="space-y-6" onSubmit={searchUser}>
           <div>
             <input
@@ -63,7 +66,7 @@ const Frame = () => {
             Search
           </button>
 
-          <p>Showing user for "{search}"</p>
+          <p>{search.length > 0 ? `Showing users for "${search}"` : ""}</p>
 
           {username.map((user) => (
             <div
@@ -83,7 +86,14 @@ const Frame = () => {
                     key={repos.id}
                     className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow my-5 sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700"
                   >
-                    {repos.name}
+                    <div className="grid grid-flow-col">
+                      <div>{repos.name}</div>
+                      <div className="flex justify-end gap-1">
+                        {repos.stargazers_count}
+                        <AiFillStar className="text-xl text-amber-400" />
+                      </div>
+                    </div>
+                    <div className="mt-4">{repos.description}</div>
                   </div>
                 ))}
               </div>
