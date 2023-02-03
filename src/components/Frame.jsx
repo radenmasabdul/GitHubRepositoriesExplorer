@@ -28,12 +28,12 @@ const Frame = () => {
       });
   };
 
-  const getRepo = async () => {
+  const getRepo = async (userRepo) => {
     await axios
-      .get(`https://api.github.com/users/${user}/repos`)
+      .get(`https://api.github.com/users/${userRepo}/repos?per_page=3&page=3`)
       .then((response) => {
-        console.log(response.data);
-        setRepo(response.data);
+        // console.log(response.data);
+        setRepoTitle(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -77,11 +77,16 @@ const Frame = () => {
                 <p key={user.id}>{user.login}</p>
               </div>
 
-              {repotitle.map((repo) => (
-                <div className="collapse-content">
-                  <p>{repo.name}</p>
-                </div>
-              ))}
+              <div className="collapse-content">
+                {repotitle.map((repos) => (
+                  <div
+                    key={repos.id}
+                    className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow my-5 sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700"
+                  >
+                    {repos.name}
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </form>
